@@ -1,20 +1,27 @@
 # AIFFEL Campus Online 5th Code Peer Review Templete
 - 코더 : 홍서이
-- 리뷰어 :
+- 리뷰어 : 홍수정
 
 
 # PRT(PeerReviewTemplate) 
 각 항목을 스스로 확인하고 토의하여 작성한 코드에 적용합니다.
 
 - [] 코드가 정상적으로 동작하고 주어진 문제를 해결했나요?
-- [] 주석을 보고 작성자의 코드가 이해되었나요?
-  > 코드에 대한 주석이 상세하여 이 코드를 짠 이유가 무엇인가 확인하기 쉬웠습니다.
-- [] 코드가 에러를 유발할 가능성이 없나요?
-  > 이해한 내용에서는 문제 없어보입니다. Project1의 figure 범위 부분이 전처리 등으로 변경될 수 있는 부분도 감안하고 코드를 짜주셨네요.
-- [] 코드 작성자가 코드를 제대로 이해하고 작성했나요?
-  > 문제에서 제시한 내용들에 대한 코드가 빠짐없이 존재하고, 문제에서 제시한 내용 이상으로 확인하고자 하는 내용 등을 추가로 확인하는 부분이 있어 이해에 문제 없이 진행하셨다고 생각합니다.
-- [] 코드가 간결한가요?
-  > Project2의 subplot 부분을 좀 더 압축해서 작성할 수 있을 것 같습니다.
+  > 리뷰를 tokenizing,encoding하여 모델 학습을 완료했으나 test accuracy가 0.85 이상이 되지 않음
+  > word2vec을 이용한 모델 개선을 진행하지 못함
+- [X] 주석을 보고 작성자의 코드가 이해되었나요?
+  > 진행 중간에 수치를 배정한 이유에 대해 md 혹은 주석으로 설명을 충분히 함
+  > ex.
+  > 데이터셋 내 문장길이 분포는 10~20 사이가 가장 빈도가 높다.
+  > 데이터셋 내 문장길이의 평균은 약 16이다.
+  > 따라서 최대 문장 길이는 (평균 + 2*표준편차)인 16 + 24 = 40으로 설정할 것이다.
+- [X] 코드가 에러를 유발할 가능성이 없나요?
+  > 코드가 문제가 될 부분은 확인 되지 않음
+- [X] 코드 작성자가 코드를 제대로 이해하고 작성했나요?
+  > 리뷰 데이터를 모델학습 시키는 부분을 데이터 정제부터 차례로 진행한 부분에서 충분한 이해가 있다고 생각함
+- [x] 코드가 간결한가요?
+  > loss/accuracy를 그리는 plot들의 경우 따로 loss, acc으로 저장하지 않고 그릴 수 있을 것으로 보이지만,
+  > 취향의 문제로 여겨질 수 있는 부분으로 충분히 간결하다고 생각함
 
 # 예시
 1. 코드의 작동 방식을 주석으로 기록합니다.
@@ -27,39 +34,17 @@
 
 # 참고 링크 및 코드 개선
 ```python
-# Project2, subplot
-# 'year', 'month', 'day', 'hour', 'minute', 'second' 컬럼을 subplot으로 하나씩 그리기
-plt.subplot(2, 3, 1)
-sns.countplot(data=df, x='year')
-plt.title('Year')
+# 데이터가 순차적으로 정렬되어 있는 경우도 존재하여 index로 분리를 한다면
+# np.random function을 이용하여 분리하는 것도 권장 드립니다.
 
-plt.subplot(2, 3, 2)
-sns.countplot(data=df, x='month')
-plt.title('Month')
+# 훈련셋, 검증셋 고르기
+train_rand_idxs = np.random.choice(50000, 700)
+val_rand_idxs = np.random.choice(10000, 300)
 
-plt.subplot(2, 3, 3)
-sns.countplot(data=df, x='day')
-plt.title('Day')
+X_train = X_train[train_rand_idxs]
+Y_train = Y_train[train_rand_idxs]
+X_val = X_val[val_rand_idxs]
+Y_val = Y_val[val_rand_idxs]
 
-plt.subplot(2, 3, 4)
-sns.countplot(data=df, x='hour')
-plt.title('Hour')
-
-plt.subplot(2, 3, 5)
-sns.countplot(data=df, x='minute')
-plt.title('Minute')
-
-plt.subplot(2, 3, 6)
-sns.countplot(data=df, x='second')
-plt.title('Second')
-
-#제가 작성했던 코드인데, 각 subplot에 할당할 내용만을 간추려서 작성할 수 있어 간결한 작성에 도움이 될 것 같습니다.
-fig, axes = plt.subplots(2, 3, figsize=(15, 10))
-
-sns.countplot(x='year', data=train, ax=axes[0, 0])
-sns.countplot(x='month', data=train, ax=axes[0, 1])
-sns.countplot(x='day', data=train, ax=axes[0, 2])
-sns.countplot(x='hour', data=train, ax=axes[1, 0])
-sns.countplot(x='minute', data=train, ax=axes[1, 1])
-sns.countplot(x='second', data=train, ax=axes[1, 2])
+#https://wikidocs.net/28952
 ```
