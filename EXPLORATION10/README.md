@@ -1,20 +1,22 @@
 # AIFFEL Campus Online 5th Code Peer Review Templete
 - 코더 : 홍서이
-- 리뷰어 :
+- 리뷰어 : 김석영
 
 
 # PRT(PeerReviewTemplate) 
 각 항목을 스스로 확인하고 토의하여 작성한 코드에 적용합니다.
 
-- [] 코드가 정상적으로 동작하고 주어진 문제를 해결했나요?
-- [] 주석을 보고 작성자의 코드가 이해되었나요?
-  > 코드에 대한 주석이 상세하여 이 코드를 짠 이유가 무엇인가 확인하기 쉬웠습니다.
-- [] 코드가 에러를 유발할 가능성이 없나요?
-  > 이해한 내용에서는 문제 없어보입니다. Project1의 figure 범위 부분이 전처리 등으로 변경될 수 있는 부분도 감안하고 코드를 짜주셨네요.
-- [] 코드 작성자가 코드를 제대로 이해하고 작성했나요?
-  > 문제에서 제시한 내용들에 대한 코드가 빠짐없이 존재하고, 문제에서 제시한 내용 이상으로 확인하고자 하는 내용 등을 추가로 확인하는 부분이 있어 이해에 문제 없이 진행하셨다고 생각합니다.
-- [] 코드가 간결한가요?
-  > Project2의 subplot 부분을 좀 더 압축해서 작성할 수 있을 것 같습니다.
+- [O] 코드가 정상적으로 동작하고 주어진 문제를 해결했나요?
+  > 네. 다양한 이미지들로 해당 문제의 평가기준들을 확인/충족하였습니다.
+  > 평가문항 1~3까지의 각각의 상세기준들을 모두 충족하였습니다.
+- [O] 주석을 보고 작성자의 코드가 이해되었나요?
+  > 네 각 tast별 주제와 각 코드별 의미를 텍스트와 주석으로 상세히 기재해 코드 이해에 어려움이 없었습니다.
+- [O] 코드가 에러를 유발할 가능성이 없나요?
+  > 이미지 주소도 함수화했고, 특별히 에러를 유발할 특이 사항은 없어 보입니다.
+- [O] 코드 작성자가 코드를 제대로 이해하고 작성했나요?
+  > Task의 구분이 세분화돼 있고, 각 task에 대한 설명이 상세하므로, 제대로 된 이해를 바탕으로 코드가 작성이 돼 있는 것으로 보입니다.
+- [O] 코드가 간결한가요?
+  > 꼭 필요한 코드들로 간결하게 작성이 돼 있다고 할 수 있습니다.
 
 # 예시
 1. 코드의 작동 방식을 주석으로 기록합니다.
@@ -22,44 +24,23 @@
 3. 참고한 링크 및 ChatGPT 프롬프트 명령어가 있다면 주석으로 남겨주세요.
 
 ```python
-작동 방식은 Exploration 노드1에서 학습한 내용 기반입니다. 
+# BRG가 아닌 RGB 순서로 변경
+colormap = np.zeros((256, 3), dtype = int)
+ind = np.arange(256, dtype=int)
+
+for shift in reversed(range(8)):
+    for channel in range(3):
+        colormap[:, channel] |= ((ind >> channel) & 1) << shift
+    ind >>= 3
+    
+seg_color = (128,128,192)
+seg_map = np.all(output==seg_color, axis=-1) 
+print(seg_map.shape) 
+plt.imshow(seg_map, cmap='gray')
+plt.show()
 ```
 
 # 참고 링크 및 코드 개선
 ```python
-# Project2, subplot
-# 'year', 'month', 'day', 'hour', 'minute', 'second' 컬럼을 subplot으로 하나씩 그리기
-plt.subplot(2, 3, 1)
-sns.countplot(data=df, x='year')
-plt.title('Year')
-
-plt.subplot(2, 3, 2)
-sns.countplot(data=df, x='month')
-plt.title('Month')
-
-plt.subplot(2, 3, 3)
-sns.countplot(data=df, x='day')
-plt.title('Day')
-
-plt.subplot(2, 3, 4)
-sns.countplot(data=df, x='hour')
-plt.title('Hour')
-
-plt.subplot(2, 3, 5)
-sns.countplot(data=df, x='minute')
-plt.title('Minute')
-
-plt.subplot(2, 3, 6)
-sns.countplot(data=df, x='second')
-plt.title('Second')
-
-#제가 작성했던 코드인데, 각 subplot에 할당할 내용만을 간추려서 작성할 수 있어 간결한 작성에 도움이 될 것 같습니다.
-fig, axes = plt.subplots(2, 3, figsize=(15, 10))
-
-sns.countplot(x='year', data=train, ax=axes[0, 0])
-sns.countplot(x='month', data=train, ax=axes[0, 1])
-sns.countplot(x='day', data=train, ax=axes[0, 2])
-sns.countplot(x='hour', data=train, ax=axes[1, 0])
-sns.countplot(x='minute', data=train, ax=axes[1, 1])
-sns.countplot(x='second', data=train, ax=axes[1, 2])
+필요에 따라 선택적으로 함수화 할 수 있는 부분도 있을 것 같습니다.
 ```
